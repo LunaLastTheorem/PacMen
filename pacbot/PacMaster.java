@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.List;
 
 public class PacMaster {
     ArrayList<Pac> pacs = new ArrayList<>();
@@ -10,32 +9,32 @@ public class PacMaster {
         this.map = map;
     }
 
-    public void resetPacs(){
+    public void resetPacs() {
         pacs.clear();
     }
 
-    public ArrayList<Pac> getPacs(){
+    public ArrayList<Pac> getPacs() {
         return this.pacs;
     }
 
-    public void addPac(Pac pac){
+    public void addPac(Pac pac) {
         pac.setMap(map);
         pac.setPacMaster(this);
         this.pacs.add(pac);
     }
 
-    public void play(){
-        for(Pac pac : pacs){
+    public void play() {
+        for (Pac pac : pacs) {
             pac.play();
         }
         System.out.println();
     }
 
-    public void setEnemy(PacMaster enemy){
+    public void setEnemy(PacMaster enemy) {
         this.enemy = enemy;
     }
 
-    public PacMaster getEnemy(){
+    public PacMaster getEnemy() {
         return this.enemy;
     }
 }

@@ -11,45 +11,45 @@ public class Pac {
         this.pos = pos;
     }
 
-    public Point getPosition(){
+    public Point getPosition() {
         return this.pos;
     }
 
-    public void setMap(Map map){
+    public void setMap(Map map) {
         this.map = map;
     }
 
-    public void setPacMaster(PacMaster pacMaster){
+    public void setPacMaster(PacMaster pacMaster) {
         this.pacMaster = pacMaster;
     }
 
-    public void play(){
+    public void play() {
         move();
     }
 
-    private void move(){
+    private void move() {
         ArrayList<Point> otherPacs = new ArrayList<>();
 
-        for(Pac pac : pacMaster.getPacs()){
-           if(pac.getId() != id){
+        for (Pac pac : pacMaster.getPacs()) {
+            if (pac.getId() != id) {
                 continue;
-           }
-           otherPacs.add(pac.getPosition());
+            }
+            otherPacs.add(pac.getPosition());
         }
 
-        for(Pac pac : pacMaster.getEnemy().getPacs()){
+        for (Pac pac : pacMaster.getEnemy().getPacs()) {
             otherPacs.add(pac.getPosition());
-         }
+        }
 
         Point target = map.getNextPellet(pos, otherPacs);
         moveTo(target);
     }
 
-    private void moveTo(Point point){
-        System.out.print(" | MOVE " + id + " " + point.getX() + " " + point.getY() + " ");
+    private void moveTo(Point point) {
+        System.out.print("| MOVE " + id + " " + point.getX() + " " + point.getY() + " ");
     }
 
-    public int getId(){
+    public int getId() {
         return this.id;
     }
 }

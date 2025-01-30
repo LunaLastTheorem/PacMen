@@ -1,7 +1,7 @@
 public class Point {
     private int x;
     private int y;
-    
+
     public Point(int x, int y) {
         this.x = x;
         this.y = y;
@@ -22,12 +22,12 @@ public class Point {
     public void setY(int y) {
         this.y = y;
     }
-    
-    public int distance(Point target){
+
+    public int distance(Point target) {
         return Math.abs(this.x - target.getX()) + Math.abs(this.y - target.getY());
     }
 
-    public int bfsDistance(Point target, boolean[][] map){
+    public int bfsDistance(Point target, boolean[][] map) {
         return BFS.getPathBFS(map, this, target).getPathLength();
     }
 
