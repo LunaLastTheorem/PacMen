@@ -10,4 +10,15 @@ public class Utils {
 
         return res;
     }
+
+    public String printBoard(boolean[][] map) {
+        StringBuilder res = new StringBuilder();
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[0].length; j++) {
+                res.append(map[i][j] + " ");
+            }
+            res.append("\n");
+        }
+        return res.toString();
+    }
 }

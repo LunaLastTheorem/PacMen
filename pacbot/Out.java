@@ -16,8 +16,8 @@ class Player {
 
     private void run() {
         Scanner in = new Scanner(System.in);
-        int width = in.nextInt(); // size of the grid
-        int height = in.nextInt(); // top left corner is (x=0, y=0)
+        int width = in.nextInt();
+        int height = in.nextInt();
         if (in.hasNextLine()) {
             in.nextLine();
         }
@@ -121,10 +121,10 @@ class Player {
         }
 
         public static Node getPathBFS(boolean[][] maze, Point src, Point dst) {
-            // System.err.println("Searching for path from " + src + " to " + dst);
+            System.err.println("Searching for path from " + src + " to " + dst);
 
             if (!isFree(maze, dst.getX(), dst.getY())) {
-                return null;
+                return new Node(dst.getX(), dst.getY(), null);
             }
 
             Queue<Node> q = new LinkedList<>();
@@ -193,19 +193,19 @@ class Player {
 
         public Point getNextPellet(Point pos, ArrayList<Point> otherObstacles) {
 
-            // boolean[][] mapWithObstacles = Utils.copyGrid(map);
-            // for (Point point : otherObstacles) {
-            //     mapWithObstacles[point.getY()][point.getX()] = true;
-            // }
+            boolean[][] mapWithObstacles = Utils.copyGrid(map);
+            for (Point point : otherObstacles) {
+                mapWithObstacles[point.getY()][point.getX()] = true;
+            }
 
-            Point closestPellet = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
+            Point closestPellet = new Point(0, 0);
             int dist = 999;
 
             for (int i = 0; i < height; i++) {
                 for (int j = 0; j < width; j++) {
                     if (pellets[i][j] == 10) {
                         Point palletPos = new Point(j, i);
-                        int currentDistance = palletPos.bfsDistance(pos, map);
+                        int currentDistance = palletPos.bfsDistance(pos, mapWithObstacles);
                         if (currentDistance < dist) {
                             closestPellet = palletPos;
                             dist = currentDistance;
@@ -218,19 +218,32 @@ class Player {
                 return closestPellet;
             }
 
-           for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                if (pellets[i][j] > 0) {
-                    Point palletPos = new Point(j, i);
-                    int currentDistance = palletPos.bfsDistance(pos, map);
-                    if (currentDistance < dist) {
-                        closestPellet = palletPos;
-                        dist = currentDistance;
+            for (int i = 0; i < height; i++) {
+                for (int j = 0; j < width; j++) {
+                    if (pellets[i][j] > 0) {
+                        Point palletPos = new Point(j, i);
+                        int currentDistance = palletPos.bfsDistance(pos, mapWithObstacles);
+                        if (currentDistance < dist) {
+                            closestPellet = palletPos;
+                            dist = currentDistance;
+                        }
                     }
                 }
             }
-        }
             return closestPellet;
+        }
+
+        @Override
+        public String toString() {
+            StringBuilder res = new StringBuilder();
+            for (int i = 0; i < height; i++) {
+                for (int j = 0; j < width; j++) {
+                    int p = map[i][j] ? 1 : 0;
+                    res.append(p + " ");
+                }
+                res.append("\n");
+            }
+            return res.toString();
         }
     }
 
@@ -276,6 +289,7 @@ class Player {
             }
 
             Point target = map.getNextPellet(pos, otherPacs);
+            System.err.println(map.toString());
             moveTo(target);
         }
 
@@ -285,6 +299,11 @@ class Player {
 
         public int getId() {
             return this.id;
+        }
+
+        @Override
+        public String toString() {
+            return "id: " + id + ", " + pos.toString();
         }
     }
 
@@ -356,8 +375,8 @@ class Player {
             return Math.abs(this.x - target.getX()) + Math.abs(this.y - target.getY());
         }
 
-        public int bfsDistance(Point target, boolean[][] map) {
-            return BFS.getPathBFS(map, this, target).getPathLength();
+        public int bfsDistance(Point target, boolean[][] newMap) {
+            return BFS.getPathBFS(newMap, target, this).getPathLength();
         }
 
         @Override
@@ -378,5 +397,18 @@ class Player {
 
             return res;
         }
+
+        public static String printBoard(boolean[][] map) {
+            StringBuilder res = new StringBuilder();
+            for (int i = 0; i < map.length; i++) {
+                for (int j = 0; j < map[0].length; j++) {
+                    int p = map[i][j] ? 1 : 0;
+                    res.append(p + " ");
+                }
+                res.append("\n");
+            }
+            return res.toString();
+        }
     }
+
 }

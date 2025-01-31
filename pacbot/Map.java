@@ -35,10 +35,10 @@ public class Map {
 
     public Point getNextPellet(Point pos, ArrayList<Point> otherObstacles) {
 
-        // boolean[][] mapWithObstacles = Utils.copyGrid(map);
-        // for (Point point : otherObstacles) {
-        //     mapWithObstacles[point.getY()][point.getX()] = true;
-        // }
+        boolean[][] mapWithObstacles = Utils.copyGrid(map);
+        for (Point point : otherObstacles) {
+            mapWithObstacles[point.getY()][point.getX()] = true;
+        }
 
         Point closestPellet = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
         int dist = 999;
@@ -73,5 +73,18 @@ public class Map {
         }
     }
         return closestPellet;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder res = new StringBuilder();
+        for(int i = 0; i < height; i++){
+            for(int j = 0; j < width; j++){
+                int p = map[i][j] ? 1: 0;
+                res.append(p + " ");
+            }
+            res.append("\n");
+        }
+        return res.toString();
     }
 }
