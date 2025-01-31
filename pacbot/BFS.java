@@ -19,17 +19,29 @@ public class BFS {
             return this.parent;
         }
 
-        // public Point getNextPoint(){
-        // Point p = new Point(x, y);
+        public Point getNextPoint(){
+            Point p = new Point(x, y);
 
-        // Node parent = this;
-        // while(parent.getParent() != null){
-        // p = new Point(parent.x, parent.y);
-        // parent = parent.getParent();
-        // }
+            Node parent = this;
+            while(parent.getParent() != null){
+                p = new Point(parent.x, parent.y);
+                parent = parent.getParent();
+            }
 
-        // return p;
-        // }
+            return p;
+        }
+
+        public Point get2ndNextPoint(){
+            Point p = new Point(x, y);
+
+            Node parent = this;
+            while(parent.getParent() != null && parent.getParent().getParent() != null){
+                p = new Point(parent.x, parent.y);
+                parent = parent.getParent();
+            }
+
+            return p;
+        }
 
         public String toString() {
             return "x: " + x + " y: " + y;
@@ -49,29 +61,30 @@ public class BFS {
     }
 
     public static Node getPathBFS(boolean[][] maze, Point src, Point dst) {
-        // System.err.println("Searching for path from " + src + " to " + dst);
+
+        int width = maze[0].length;
 
         if (!isFree(maze, dst.getX(), dst.getY())) {
             return null;
         }
 
         Queue<Node> q = new LinkedList<>();
-        boolean[][] visited = Utils.copyGrid(maze);
-        visited[src.getY()][src.getX()] = true;
+        maze = Utils.copyGrid(maze);
+        maze[src.getY()][src.getX()] = true;
         q.add(new Node(src.getX(), src.getY(), null));
 
         while (!q.isEmpty()) {
-            Node p = q.poll();
+            Node p = q.remove();
 
             if (p.x == dst.getX() && p.y == dst.getY()) {
                 return p;
             }
 
             for (int i = 0; i < dir.length; i++) {
-                int newX = p.x + dir[i][0];
+                int newX = (p.x + dir[i][0] + width) % width;
                 int newY = p.y + dir[i][1];
-                if (isFree(maze, newX, newY) && !visited[newY][newX]) {
-                    visited[newY][newX] = true;
+                if (isFree(maze, newX, newY)) {
+                    maze[newY][newX] = true;
                     Node nextP = new Node(newX, newY, p);
                     q.add(nextP);
                 }

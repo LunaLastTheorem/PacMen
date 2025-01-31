@@ -6,7 +6,7 @@ import java.math.*;
  * Grab the pellets as fast as you can!
  **/
 class Player {
-    Map map;
+    Maze map;
     PacMaster me = new PacMaster();
     PacMaster enemy = new PacMaster();
 
@@ -29,7 +29,7 @@ class Player {
             stringMap.add(row);
         }
 
-        map = new Map(width, height, stringMap);
+        map = new Maze(width, height, stringMap);
         me.setMap(map);
         enemy.setMap(map);
 
@@ -53,7 +53,7 @@ class Player {
                 int speedTurnsLeft = in.nextInt();
                 int abilityCooldown = in.nextInt();
 
-                Pac pac = new Pac(pacId, new Point(x, y));
+                Pac pac = new Pac(pacId, new Point(x, y), abilityCooldown, mine, typeId);
 
                 if(mine){
                     me.addPac(pac);
@@ -61,15 +61,20 @@ class Player {
                     enemy.addPac(pac);
                 }
             }
-            map.resetPellets();
+
+            ArrayList<Pellet> pellets = new ArrayList<>();
             int visiblePelletCount = in.nextInt();
             for (int i = 0; i < visiblePelletCount; i++) {
                 int x = in.nextInt();
                 int y = in.nextInt();
                 int value = in.nextInt();
 
-                map.addPellet(new Point(x,y), value);
+                pellets.add(new Pellet(new Point(x, y), value));
             }
+
+            // System.err.println("all intputes read");
+
+            map.updatePellets(pellets, me.getPacs());
 
             me.play();
         }

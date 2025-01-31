@@ -28,11 +28,25 @@ public class Point {
     }
 
     public int bfsDistance(Point target, boolean[][] map) {
-        return BFS.getPathBFS(map, this, target).getPathLength();
+        BFS.Node node = BFS.getPathBFS(map, this, target);
+        if(node != null){
+            return node.getPathLength();
+        }
+        return 999999;
+    }
+
+    public static Point getPointInDirection(Point point, Direction dir, int dist){
+        return new Point(point.getX() + (dir.Dx  * dist), point.getY() + (dir.Dy * dist));
     }
 
     @Override
     public String toString() {
         return "x: " + x + " y: " + y;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        Point point = (Point) obj;
+        return x == point.getX() && y == point.getY();
     }
 }
